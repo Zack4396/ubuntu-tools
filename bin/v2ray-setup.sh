@@ -18,6 +18,86 @@ LOCAL_VPS_PORT=${LOCAL_VPS_PORT:-none}
 # If LOCAL_VPS_PORT is not set, use default protocol shadowsocks.
 LOCAL_VPS_PROTOCOL=${LOCAL_VPS_PROTOCOL:-shadowsocks}
 
+log_info() {
+  # green
+  echo -en "\033[30;32m$@\033[0m"
+}
+
+log_notice() {
+  # red
+  echo -en "\033[30;31m$@\033[0m"
+}
+
+usage() {
+  log_notice "Here are your exported settings\n"
+  log_info "export LOCAL_TEMP_PROXY="$LOCAL_TEMP_PROXY"\n"
+  log_info "export LOCAL_PROXY_PORT="$LOCAL_PROXY_PORT"\n"
+  log_info "export LOCAL_VPS_PROTOCOL="$LOCAL_VPS_PROTOCOL"\n"
+  log_info "export LOCAL_VPS_ADDRESS="$LOCAL_VPS_ADDRESS"\n"
+  log_info "export LOCAL_VPS_PORT="$LOCAL_VPS_PORT"\n"
+  log_info "export LOCAL_VPS_KEY="$LOCAL_VPS_KEY"\n"
+}
+
+check_is_running_as_root() {
+  # Please don't executing this script with root, it will lose some exported env.
+  if [[ "$UID" -eq '0' ]]; then
+    echo "Running with root, exiting..."
+    echo "Please switch to the normal user"
+    exit 1
+  fi
+}
+
+check_is_valid_env() {
+  is_valid="true"
+  ip=${LOCAL_TEMP_PROXY%:*}
+  port=${LOCAL_TEMP_PROXY#*:}
+  # Check IP address is or not valid
+  if ! echo "$ip" | grep -qE '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'; then
+    log_notice "LOCAL_TEMP_PROXY - has invalid IP address: $ip\n"
+    is_valid="false"
+  fi
+  # Check port is or not valid
+  if ! [[ "$port" =~ ^[0-9]+$ ]] || (( port < 1 )) || (( port > 65535 )); then
+    log_notice "LOCAL_TEMP_PROXY - has invalid port number: $port\n"
+    is_valid="false"
+  fi
+
+  proxy_port=$LOCAL_PROXY_PORT
+  # Check proxy port is or not valid
+  if ! [[ "$proxy_port" =~ ^[0-9]+$ ]] || (( proxy_port < 1 )) || (( proxy_port > 65535 )); then
+    log_notice "LOCAL_PROXY_PORT - Invalid port number: $proxy_port\n"
+    is_valid="false"
+  fi
+
+  vps_port=$LOCAL_VPS_PORT
+  # Check vps port is or not valid
+  if ! [[ "$vps_port" =~ ^[0-9]+$ ]] || (( vps_port < 1 )) || (( vps_port > 65535 )); then
+    log_notice "LOCAL_VPS_PORT - Invalid port number: $vps_port\n"
+    is_valid="false"
+  fi
+
+  vps_uuid=$LOCAL_VPS_KEY
+  # Check vps uuid is or not valid
+  if ! [[ "$vps_uuid" =~ ^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$ ]]; then
+    log_notice "LOCAL_VPS_KEY - Invalid uuid: $vps_uuid\n"
+    is_valid="false"
+  fi
+
+  vps_address=$LOCAL_VPS_ADDRESS
+  log_info "try to ping vps server address - $vps_address\n"
+  ping -c 1 "$vps_address" >/dev/null 2>&1
+  if ! [[ $? -eq 0 ]]; then
+    log_notice "LOCAL_VPS_ADDRESS - cannot be pinged: $vps_address\n"
+    is_valid="false"
+  fi
+
+  if ! [[ "$is_valid" == "true" ]]; then
+    log_notice "\nBefore running this script again, make sure you have corrected ENV.\n"
+    usage
+    exit 1
+  fi
+}
+
 install_v2ray() {
   sudo apt install -y curl git
 
@@ -115,28 +195,6 @@ sudo mv /tmp/config-vmess.json /usr/local/etc/v2ray/config-vmess.json
 }
 
 setup_v2ray() {
-  echo -e "\n\n\n\n"
-  echo "Here are the VPS settings"
-  echo "LOCAL_VPS_PROTOCOL: $LOCAL_VPS_PROTOCOL"
-  echo "LOCAL_VPS_ADDRESS : $LOCAL_VPS_ADDRESS"
-  echo "LOCAL_VPS_KEY     : $LOCAL_VPS_KEY"
-  echo "LOCAL_VPS_PORT    : $LOCAL_VPS_PORT"
-  echo -e "\n\n\n\n"
-  echo "Here are some commands which use to set/unset global proxy"
-  echo "// repo, wget"
-  echo "# export http_proxy=127.0.0.1:$LOCAL_PROXY_PORT"
-  echo "# export https_proxy=127.0.0.1:$LOCAL_PROXY_PORT"
-  echo "# export http_proxy="
-  echo "# export https_proxy="
-  echo "// curl"
-  echo "# echo "proxy = 127.0.0.1:$LOCAL_PROXY_PORT" > ~/.curlrc"
-  echo "# rm ~/.curlrc"
-  echo "// git"
-  echo "# git config --global http.proxy http://127.0.0.1:$LOCAL_PROXY_PORT"
-  echo "# git config --global https.proxy http://127.0.0.1:$LOCAL_PROXY_PORT"
-  echo "# git config --global --unset http.proxy"
-  echo "# git config --global --unset https.proxy"
-
   create_shadowsocks_json
   create_vmess_json
   if [ $LOCAL_VPS_PROTOCOL == "vmess" ]; then
@@ -150,5 +208,16 @@ setup_v2ray() {
   sudo systemctl start v2ray
 }
 
-install_v2ray
-setup_v2ray
+main() {
+  check_is_valid_env
+  check_is_running_as_root
+  install_v2ray
+  setup_v2ray
+
+  echo -e "\n"
+  log_notice "Please use this command to check the proxy is working now.\n"
+  log_info   "$ wget -e "http_proxy=http://127.0.0.1:$LOCAL_PROXY_PORT/" www.google.com -O /dev/null\n"
+  echo -e "\n"
+}
+
+main $@

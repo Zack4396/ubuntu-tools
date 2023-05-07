@@ -34,15 +34,17 @@ kiki@ubuntu:~/ubuntu-tools$ export LOCAL_VPS_PORT="your-vps-port"
 kiki@ubuntu:~/ubuntu-tools$ export LOCAL_VPS_KEY="your-vps-key"
 kiki@ubuntu:~/ubuntu-tools$ 
 kiki@ubuntu:~/ubuntu-tools$ bash bin/v2ray-setup.sh
+try to ping vps server address - xxxxx.com
+[sudo] password for kiki: 
 Reading package lists... Done
 Building dependency tree       
 Reading state information... Done
 curl is already the newest version (7.68.0-1ubuntu2.18).
 git is already the newest version (1:2.25.1-1ubuntu3.11).
-0 upgraded, 0 newly installed, 0 to remove and 97 not upgraded.
+0 upgraded, 0 newly installed, 0 to remove and 95 not upgraded.
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100 22454  100 22454    0     0  58934      0 --:--:-- --:--:-- --:--:-- 58934
+100 22454  100 22454    0     0   176k      0 --:--:-- --:--:-- --:--:--  178k
 info: Stop the V2Ray service.
 removed: /usr/local/bin/v2ray
 removed: /usr/local/share/v2ray
@@ -60,9 +62,9 @@ Downloading V2Ray archive: https://github.com/v2fly/v2ray-core/releases/download
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
-100 11.2M  100 11.2M    0     0  6012k      0  0:00:01  0:00:01 --:--:-- 11.2M
+100 11.2M  100 11.2M    0     0  6192k      0  0:00:01  0:00:01 --:--:-- 10.6M
 Downloading verification file for V2Ray archive: https://github.com/v2fly/v2ray-core/releases/download/v5.4.1/v2ray-linux-64.zip.dgst
-info: Extract the V2Ray package to /tmp/tmp.bE5QZcP5oT and prepare it for installation.
+info: Extract the V2Ray package to /tmp/tmp.ZsHXpHIYzq and prepare it for installation.
 info: Systemd service files have been installed successfully!
 warning: The following are the actual parameters for the v2ray service startup.
 warning: Please make sure the configuration file path is correctly set.
@@ -96,49 +98,25 @@ installed: /usr/local/share/v2ray/geoip.dat
 installed: /usr/local/share/v2ray/geosite.dat
 installed: /etc/systemd/system/v2ray.service
 installed: /etc/systemd/system/v2ray@.service
-removed: /tmp/tmp.bE5QZcP5oT
+removed: /tmp/tmp.ZsHXpHIYzq
 info: V2Ray v5.4.1 is installed.
 You may need to execute a command to remove dependent software: apt purge curl unzip
 Please execute the command: systemctl enable v2ray; systemctl start v2ray
 
 
+Please use this command to check the proxy is working now.
+$ wget -e http_proxy=http://127.0.0.1:10809/ www.google.com -O /dev/null
 
 
-
-Here are the VPS settings
-LOCAL_VPS_PROTOCOL: shadowsocks
-LOCAL_VPS_ADDRESS : xxxx
-LOCAL_VPS_KEY     : xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-LOCAL_VPS_PORT    : xxxx
-
-
-
-
-
-Here are some commands which use to set/unset global proxy
-// repo, wget
-# export http_proxy=127.0.0.1:10809
-# export https_proxy=127.0.0.1:10809
-# export http_proxy=
-# export https_proxy=
-// curl
-# echo proxy = 127.0.0.1:10809 > ~/.curlrc
-# rm ~/.curlrc
-// git
-# git config --global http.proxy http://127.0.0.1:10809
-# git config --global https.proxy http://127.0.0.1:10809
-# git config --global --unset http.proxy
-# git config --global --unset https.proxy
-kiki@ubuntu:~/ubuntu-tools$ 
 kiki@ubuntu:~/ubuntu-tools$ wget -e "http_proxy=http://127.0.0.1:$LOCAL_PROXY_PORT/" www.google.com -O /dev/null
---2023-05-06 21:08:21--  http://www.google.com/
+--2023-05-07 02:20:18--  http://www.google.com/
 Connecting to 127.0.0.1:10809... connected.
 Proxy request sent, awaiting response... 200 OK
 Length: unspecified [text/html]
 Saving to: ‘/dev/null’
 
-/dev/null                                              [ <=>                                                                                                            ]  15.67K  --.-KB/s    in 0.02s   
+/dev/null                                              [ <=>                                                                                                            ]  15.62K  --.-KB/s    in 0.02s   
 
-2023-05-06 21:08:22 (950 KB/s) - ‘/dev/null’ saved [16044]
+2023-05-07 02:20:18 (793 KB/s) - ‘/dev/null’ saved [15990]
 
 ```
