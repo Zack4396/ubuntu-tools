@@ -613,12 +613,23 @@ if !exists('g:loaded_nerd_tree')
     \ '\.vpython_cipd_cache$',
     \ '\.vpython-root$',
     \ '\.wget-hsts$',
-    \ '\*.o',
-    \ '\*.cmd',
-    \ '\*.ko',
-    \ '\*.order',
-    \ '\*.symvers',
-    \ '\.tmp_versions'
+    \ '\.o$',
+    \ '\.o.cmd$',
+    \ '\.o.d$',
+    \ '\.mod.*$',
+    \ '\.cmd$',
+    \ '\.ko$',
+    \ '\.ko.cmd$',
+    \ '\.dtb$',
+    \ '\.dtb.cmd$',
+    \ '\GPATH$',
+    \ '\GRTAGS$',
+    \ '\GTAGS$',
+    \ '\.order$',
+    \ '\.symvers$',
+    \ '\built-in.a$',
+    \ '\modules.builtin$',
+    \ '\.tmp_versions$'
     \ ]
   "autocmd VimEnter * NERDTree | wincmd p        " Start NERDTree and put the cursor back
                                                 " in the other window.

@@ -2,7 +2,8 @@
 Provide some initial tools for a new ubuntu system.
 
 ## bin/v2ray-setup.sh
-
+<details>
+<summary>`bin/v2ray-setup.sh` usage</summary>
 * Setup commands
 
 ```
@@ -120,3 +121,20 @@ Saving to: ‘/dev/null’
 2023-05-07 02:20:18 (793 KB/s) - ‘/dev/null’ saved [15990]
 
 ```
+</details>
+
+## bin/run-pathogen.py
+<details>
+<summary>`bin/run-pathogen.py` usage</summary>
+* Setup commands
+
+```
+# Install
+$ ./bin/run-pathogen.py --check
+$ ./bin/run-pathogen.py --install_all --proxy 127.0.0.1:10809
+$ ./bin/run-pathogen.py --install coc-extensions
+$ source $HOME/.bashrc
+```
+
+</details>
+

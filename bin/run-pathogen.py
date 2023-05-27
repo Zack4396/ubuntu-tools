@@ -8,6 +8,7 @@ Version: 0.0.1
 
 Usage:
   # 1. install all vim plugins
+  $ ./bin/run-pathogen.py --check
   $ ./bin/run-pathogen.py --install_all --proxy 127.0.0.1:10809
   $ ./bin/run-pathogen.py --install coc-extensions
   $ source $HOME/.bashrc
@@ -807,6 +808,53 @@ def CheckAndReturnAddress(server_str: str):
   return dict(proxy_ip=ip, proxy_port=port)
 
 
+def InitVim() -> bool:
+  current_path = os.path.abspath(__file__)
+  repository_path = os.path.abspath(
+    os.path.dirname(current_path) + os.path.sep + '..')
+  home_path = os.path.expanduser('~')
+
+  file_names = ['.vimrc', '.vim/mis-func.vim', '.vim/run-pathogen.vim']
+
+  for item in file_names:
+    src_file = os.path.join(repository_path, item)
+    dst_file = os.path.join(home_path, item)
+
+    # check src file
+    if not os.path.isfile(src_file):
+      # src_file must be exist
+      print(f'{Fore.RED}{src_file} is not exist{Fore.RESET}')
+      return False
+
+    # create dst file
+    if not os.path.islink(dst_file) or not os.path.samefile(
+        src_file, os.readlink(dst_file)):
+      dst_dir = os.path.abspath(os.path.dirname(dst_file) + os.path.sep + '.')
+      if not os.path.exists(dst_dir):
+        os.makedirs(dst_dir, exist_ok=True)
+
+      if not os.path.isdir(dst_dir):
+        print(
+          f'{Fore.RED}{dst_dir}{Fore.RESET} is not dir, please remove it firstly'
+        )
+        return False
+
+      if not os.path.exists(dst_file):
+        os.symlink(src_file, dst_file, target_is_directory=False)
+        print(f'create {dst_file} -> {src_file} link')
+      elif os.path.isfile(dst_file) or os.path.islink(dst_file):
+        os.remove(dst_file)
+        os.symlink(src_file, dst_file, target_is_directory=False)
+        print(f'create {dst_file} -> {src_file} link')
+      else:
+        print(f'Please remove {Fore.RED}{dst_dir}{Fore.RESET} first')
+        return False
+    else:
+      continue
+
+  return True
+
+
 def check_version(cmd: list, min_version_str='', offset=0) -> bool:
   try:
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -845,6 +893,9 @@ def main():
                       '--install_all',
                       action='store_true',
                       help='Install all supported plugins')
+  parser.add_argument('--check',
+                      action='store_true',
+                      help='Check and create vim directory')
   parser.add_argument('-d',
                       '--debug',
                       action='store_true',
@@ -872,6 +923,11 @@ def main():
                       help="Show supported plugins")
 
   args = parser.parse_args()
+
+  if args.check:
+    if not InitVim():
+      print(f'{Fore.RED}please fix the error, then try it again{Fore.RESET}')
+    return
 
   if args.debug:
     global run_pathogen_fake_enable
