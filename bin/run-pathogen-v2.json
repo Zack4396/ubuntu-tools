@@ -1,0 +1,873 @@
+{
+    "Initialization": {
+        "Create": {
+            "help": [
+                "Create vim folders"
+            ],
+            "dirs": [
+                "$HOME/.vim",
+                "$HOME/.vim/autoload",
+                "$HOME/.vim/bundle"
+            ]
+        },
+        "Copy": {
+            "0": {
+                "From": "$TOOL/.vim/mis-func.vim",
+                "To": "$HOME/.vim/mis-func.vim"
+            },
+            "1": {
+                "From": "$TOOL/.vim/run-pathogen.vim",
+                "To": "$HOME/.vim/run-pathogen.vim"
+            }
+        }
+    },
+    "Installation": {
+        "Manager": {
+            "Pathogen": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "Tim Pope",
+                    "Tip": "Manage your runtimepath with ease"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Pathogen",
+                        "From": {
+                            "type": "link",
+                            "value": "https://tpo.pe/pathogen.vim"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/autoload/pathogen.vim"
+                        },
+                        "Check": {
+                            "files": [
+                                "$To"
+                            ]
+                        },
+                        "Command": [
+                            "curl",
+                            "-Lsso",
+                            "$To",
+                            "$From"
+                        ]
+                    }
+                }
+            }
+        },
+        "Staff": {
+            "Airline": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "vim airline",
+                    "Tip": "status/tabline for vim"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Airline",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/vim-airline/vim-airline"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/airline"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/airline.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Airline_themes": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "vim airline",
+                    "Tip": "status/tabline themes for vim"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Airline Themes",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/vim-airline/vim-airline-themes"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/airline_themes"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/airline-themes.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Bufexplorer": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "Federico Holgado",
+                    "Tip": "Elegant buffer explorer - takes very little screen space"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Bufexplorer",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/fholgado/minibufexpl.vim"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/bufexplorer"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/minibufexpl.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Colorschemes": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "Franco Lazzarino",
+                    "Tip": "one stop shop for vim colorschemes"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Colorschemes",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/flazz/vim-colorschemes.git"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/colorschemes"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/colors/molokai.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Colors_solarized": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "Ethan Schoonover",
+                    "Tip": "Solarized Colorscheme for Vim"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Colors solarized",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/altercation/vim-colors-solarized"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/colors_solarized"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/colors/solarized.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Ctrlp": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "ctrlpvim",
+                    "Tip": "Full path fuzzy file, buffer, mru, tag, ... finder for Vim."
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Ctrlp",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/ctrlpvim/ctrlp.vim"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/ctrlp"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/ctrlp.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Drawit": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "vim-script",
+                    "Tip": "A plugin which allows one to draw lines left, right, up, down, and along both slants"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Drawit",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/vim-scripts/DrawIt.git"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/drawit"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/DrawItPlugin.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Global": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "GNU",
+                    "Tip": "Global source code tagging system"
+                },
+                "Commands-Linux": {
+                    "Download": {
+                        "Usage": "Download Global",
+                        "From": {
+                            "type": "link",
+                            "value": "https://ftp.gnu.org/pub/gnu/global/global-6.6.9.tar.gz"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/global.tar.gz"
+                        },
+                        "Check": {
+                            "files": [
+                                "$To"
+                            ]
+                        },
+                        "Command": [
+                            "wget",
+                            "--quiet",
+                            "-O",
+                            "$To",
+                            "$From"
+                        ]
+                    },
+                    "Install": {
+                        "Usage": "Install Global",
+                        "From": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/global.tar.gz"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/global-6.6.9"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To"
+                            ],
+                            "files": [
+                                "$To/plugin/gtags-cscope.vim",
+                                "$To/plugin/gtags.vim",
+                                "$To/global/global",
+                                "$To/gtags/gtags",
+                                "$To/htags/htags",
+                                "$To/gtags-cscope/gtags-cscope",
+                                "$HOME/bin/global",
+                                "$HOME/bin/gtags",
+                                "$HOME/bin/htags",
+                                "$HOME/bin/gtags-cscope"
+                            ]
+                        },
+                        "Command": [
+                            "bash",
+                            "$TOOL/bin/scripts/global.sh",
+                            "--home",
+                            "$HOME",
+                            "--package",
+                            "$From",
+                            "--version",
+                            "6.6.9"
+                        ]
+                    }
+                },
+                "Commands-Windows": {
+                    "Download": {
+                        "Usage": "Download Global",
+                        "From": {
+                            "type": "link",
+                            "value": "http://adoxa.altervista.org/global/dl.php?f=win32"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/global.zip"
+                        },
+                        "Check": {
+                            "files": [
+                                "$To"
+                            ]
+                        },
+                        "Command": [
+                            "wget",
+                            "-O",
+                            "$To",
+                            "$From"
+                        ]
+                    },
+                    "Install": {
+                        "Usage": "Install Global",
+                        "From": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/global.zip"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/global-6.6.9"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To"
+                            ],
+                            "files": [
+                                "$To/plugin/gtags-cscope.vim",
+                                "$To/plugin/gtags.vim",
+                                "$To/bin/global.exe",
+                                "$To/bin/gtags.exe",
+                                "$To/bin/htags.exe",
+                                "$To/bin/gtags-cscope.exe"
+                            ]
+                        },
+                        "Command": [
+                            "$TOOL\\bin\\scripts\\global.bat",
+                            "--home",
+                            "$HOME",
+                            "--package",
+                            "$From"
+                        ]
+                    }
+                }
+            },
+            "Lightline": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "itchyny",
+                    "Tip": "A light and configurable statusline/tabline plugin for Vim"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Lightline",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/itchyny/lightline.vim"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/lightline"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/lightline.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Nerdtree": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "Phil Runninger",
+                    "Tip": "A file system explorer for the Vim editor"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Nerdtree",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/scrooloose/nerdtree"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/nerdtree"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/NERD_tree.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Tagbar": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "Jan Larres",
+                    "Tip": "A class outline viewer for Vim"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Tagbar",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/preservim/tagbar"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/tagbar"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/tagbar.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Taglist": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "Yegappan Lakshmanan",
+                    "Tip": "Provides an overview of the structure of source code files"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Taglist",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/yegappan/taglist"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/taglist"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/taglist.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Winmanager": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "Srinath Avadhanula",
+                    "Tip": "A classical windows type environment for vim6.0"
+                },
+                "Commands": {
+                    "Install": {
+                        "Usage": "Install Winmanager",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/vim-scripts/winmanager"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/winmanager"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/winfileexplorer.vim",
+                                "$To/plugin/winmanager.vim",
+                                "$To/plugin/wintagexplorer.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    }
+                }
+            }
+        },
+        "Core": {
+            "Coc": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "neoclide",
+                    "Tip": "Make your Vim/Neovim as smart as VS Code"
+                },
+                "Commands-Linux": {
+                    "Download": {
+                        "Usage": "Download Coc",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/neoclide/coc.nvim"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/coc.nvim"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/coc.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    },
+                    "Install": {
+                        "Usage": "Install Coc",
+                        "From": {
+                            "type": "path",
+                            "value": "$TOOL/bin/scripts/coc.sh"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/coc.nvim"
+                        },
+                        "Check": {
+                            "files": [
+                                "$To/build/index.js"
+                            ]
+                        },
+                        "Command": [
+                            "bash",
+                            "$From",
+                            "--install_path",
+                            "$To"
+                        ]
+                    }
+                },
+                "Commands-Windows": {
+                    "Download": {
+                        "Usage": "Download Coc",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/neoclide/coc.nvim"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/coc.nvim"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/coc.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    },
+                    "Install": {
+                        "Usage": "Install Coc",
+                        "From": {
+                            "type": "path",
+                            "value": "$TOOL/bin/scripts/coc.bat"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/coc.nvim"
+                        },
+                        "Check": {
+                            "files": [
+                                "$To/build/index.js"
+                            ]
+                        },
+                        "Command": [
+                            "$From",
+                            "--install_path",
+                            "$To"
+                        ]
+                    }
+                }
+            },
+            "Coc-extensions": {
+                "Enable": true,
+                "Introduce": {
+                    "Author": "-",
+                    "Tip": "-"
+                },
+                "Commands-Linux": {
+                    "Install": {
+                        "Usage": "Install Coc-extensions",
+                        "From": {
+                            "type": "link",
+                            "value": ""
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.config/coc/extensions/node_modules"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/coc-pyright",
+                                "$To/coc-sh",
+                                "$To/coc-json",
+                                "$To/coc-pairs"
+                            ]
+                        },
+                        "Command": [],
+                        "Help": [
+                            " Please run install coc-extensions mananully:",
+                            " $ vim",
+                            "",
+                            " Then run this command",
+                            " :CocInstall coc-pyright coc-pairs coc-sh coc-json coc-clangd",
+                            "",
+                            " Note: for coc-pyright, we need isntall a packge, otherwise you may failed to install the coc-pyright",
+                            " $ pip3 install python-language-server[all]"
+                        ]
+                    }
+                },
+                "Commands-Windows": {
+                    "Install": {
+                        "Usage": "Install Coc-extensions",
+                        "From": {
+                            "type": "link",
+                            "value": ""
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/AppData/Local/coc/extensions/node_modules"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/coc-pyright",
+                                "$To/coc-sh",
+                                "$To/coc-json",
+                                "$To/coc-pairs"
+                            ]
+                        },
+                        "Command": [],
+                        "Help": [
+                            " Please run install coc-extensions mananully:",
+                            " $ vim",
+                            "",
+                            " Then run this command",
+                            " :CocInstall coc-pyright coc-pairs coc-sh coc-json coc-clangd",
+                            "",
+                            " Note: for coc-pyright, we need isntall a packge, otherwise you may failed to install the coc-pyright",
+                            " $ pip3 install python-language-server[all]"
+                        ]
+                    }
+                }
+            },
+            "Youcompleteme": {
+                "Enable": false,
+                "Introduce": {
+                    "Author": "Val Markovic",
+                    "Tip": "a code-completion engine for Vim"
+                },
+                "Commands-Linux": {
+                    "Download": {
+                        "Usage": "Download Youcompleteme",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/valloric/youcompleteme"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/youcompleteme"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/.git"
+                            ],
+                            "files": [
+                                "$To/plugin/youcompleteme.vim"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "clone",
+                            "--quiet",
+                            "$From",
+                            "$To"
+                        ]
+                    },
+                    "Update": {
+                        "Usage": "Update Youcompleteme",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/valloric/youcompleteme"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/youcompleteme"
+                        },
+                        "Check": {
+                            "dirs": [
+                                "$To/third_party/ycmd/.github"
+                            ],
+                            "files": [
+                                "$To/third_party/ycmd/.ycm_extra_conf.py"
+                            ]
+                        },
+                        "Command": [
+                            "git",
+                            "-C",
+                            "$To",
+                            "submodule",
+                            "update",
+                            "--init",
+                            "--recursive",
+                            "--quiet"
+                        ]
+                    },
+                    "Install": {
+                        "Usage": "Install Youcompleteme",
+                        "From": {
+                            "type": "link",
+                            "value": "https://github.com/valloric/youcompleteme"
+                        },
+                        "To": {
+                            "type": "path",
+                            "value": "$HOME/.vim/bundle/youcompleteme"
+                        },
+                        "Check": {
+                            "files": [
+                                "$To/cpp/ycm/.ycm_extra_conf.py"
+                            ]
+                        },
+                        "Command": [
+                            "bash",
+                            "$TOOL/bin/scripts/youcompleteme.sh",
+                            "--install_path",
+                            "$To"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

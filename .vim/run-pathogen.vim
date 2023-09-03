@@ -26,6 +26,17 @@ if exists('g:loaded_run_pathogen_vim')
 endif
 let g:loaded_run_pathogen_vim = 1
 
+" Fixed from https://github.com/tpope/vim-pathogen/issues/50#issuecomment-51521621
+if has('win32') || has('win64')
+    set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+    set nocompatible
+    set backspace=2
+    set mouse=
+    set lines=999 columns=999
+    set guioptions+=m
+    set guifont=Consolas:h12
+endif
+
 " --------------------------------------------------------------------------------------------------
 " **************************************************************************************************
 " *                               Plugin Enable/Disable - Global Hold                              *
@@ -55,20 +66,20 @@ let s:bypass_drawit           = 0
 "  let g:loaded_pathogen = 1                  "pathogen " [O] From ~/.vim/autoload/pathogen.vim
 "  let g:loaded_winmanager = 1              "winmanager " [O] From ~/.vim/bundle/winmanager/plugin/winmanager.vim
 "  let g:loaded_nerd_tree = 1                "nerd_tree " [O] From ~/.vim/bundle/nerdtree/plugin/NERD_tree.vim'
-"  let g:loaded_minibufexplorer = 1    "minibufexplorer " [O] From ~/.vim/bundle/minibufexpl.vim/plugin/minibufexpl.vim
+"  let g:loaded_minibufexplorer = 1    "minibufexplorer " [O] From ~/.vim/bundle/bufexplorer/plugin/minibufexpl.vim
 "  let g:loaded_taglist = 1                    "taglist " [O] From ~/.vim/bundle/taglist/plugin/taglist.vim
 "  let g:loaded_tagbar = 1                      "tagbar " [O] From ~/.vim/bundle/tagbar/plugin/tagbar.vim
-"  let g:loaded_lightline = 1                "lightline " [O] From ~/.vim/bundle/lightline.vim/plugin/lightline.vim
-"  let g:loaded_airline = 1                    "airline " [O] From ~/.vim/bundle/vim-airline/plugin/airline.vim
-"  let g:loaded_airline_themes = 1       "airline_theme " [O] From ~/.vim/bundle/vim-airline-themes/plugin/airline-themes.vim
+"  let g:loaded_lightline = 1                "lightline " [O] From ~/.vim/bundle/lightline/plugin/lightline.vim
+"  let g:loaded_airline = 1                    "airline " [O] From ~/.vim/bundle/airline/plugin/airline.vim
+"  let g:loaded_airline_themes = 1       "airline_theme " [O] From ~/.vim/bundle/airline_themes/plugin/airline-themes.vim
 "  let g:loaded_colors_solarized = 1  "colors_solarized " [O] From none
 "  let g:loaded_colorschemes = 1          "colorschemes " [O] From none
 "  let g:loaded_youcompleteme = 1        "youcompleteme " [O] From ~/.vim/bundle/youcompleteme/plugin/youcompleteme.vim
 "  let g:did_coc_loaded = 1                   "coc nvim " [O] From ~/.vim/bundle/coc.nvim/plugin/coc.vim
 "  let g:loaded_gtags_cscope = 1          "gtags-cscope " [O] From ~/.vim/bundle/global-6.6.9/plugin/gtags-cscope.vim
 "  let g:loaded_gtags = 1                        "gtags " [O] From ~/.vim/bundle/global-6.6.9/plugin/gtags.vim
-"  let g:loaded_ctrlp = 1                        "ctrlp " [O] From ~/.vim/bundle/ctrlp.vim/plugin/ctrlp.vim
-"  let g:loaded_DrawItPlugin = 1                 "drawit" [O] From ~/.vim/bundle/DrawIt/plugin/DrawItPlugin.vim
+"  let g:loaded_ctrlp = 1                        "ctrlp " [O] From ~/.vim/bundle/ctrlp/plugin/ctrlp.vim
+"  let g:loaded_DrawItPlugin = 1                 "drawit" [O] From ~/.vim/bundle/drawIt/plugin/DrawItPlugin.vim
 " --------------------------------------------------------------------------------------------------
 
 function DecouplePlugins()
@@ -160,7 +171,7 @@ endfunction
 "                                                        https://github.com/fholgado/minibufexpl.vim   
 " --------------------------------------------------------------------------------------------------
 function Check_kiki_bufexplorer()
-  if !filereadable(expand("$HOME/.vim/bundle/minibufexpl.vim/plugin/minibufexpl.vim"))
+  if !filereadable(expand("$HOME/.vim/bundle/bufexplorer/plugin/minibufexpl.vim"))
     if !g:ignore_warning_msg
       echom expand("please run    bash $HOME/.vim/run-pathogen.sh -i bufexplorer")
     endif
@@ -226,7 +237,7 @@ endfunction
 "                                                           https://github.com/itchyny/lightline.vim
 " --------------------------------------------------------------------------------------------------
 function Check_kiki_lightline()
-  if !filereadable(expand("$HOME/.vim/bundle/lightline.vim/plugin/lightline.vim"))
+  if !filereadable(expand("$HOME/.vim/bundle/lightline/plugin/lightline.vim"))
     if !g:ignore_warning_msg
       echom expand("please run    bash $HOME/.vim/run-pathogen.sh -i lightline")
     endif
@@ -246,7 +257,7 @@ endfunction
 "                                                         https://github.com/vim-airline/vim-airline
 " --------------------------------------------------------------------------------------------------
 function Check_kiki_airline()
-  if !filereadable(expand("$HOME/.vim/bundle/vim-airline/plugin/airline.vim"))
+  if !filereadable(expand("$HOME/.vim/bundle/airline/plugin/airline.vim"))
     if !g:ignore_warning_msg
       echom expand("please run    bash $HOME/.vim/run-pathogen.sh -i airline")
     endif
@@ -268,7 +279,7 @@ endfunction
 "                                                  https://github.com/vim-airline/vim-airline-themes
 " --------------------------------------------------------------------------------------------------
 function Check_kiki_airline_themes()
-  if !filereadable(expand("$HOME/.vim/bundle/vim-airline-themes/plugin/airline-themes.vim"))
+  if !filereadable(expand("$HOME/.vim/bundle/airline_themes/plugin/airline-themes.vim"))
     if !g:ignore_warning_msg
       echom expand("please run    bash $HOME/.vim/run-pathogen.sh -i airline_themes")
     endif
@@ -292,7 +303,7 @@ endfunction
 "                                                https://github.com/altercation/vim-colors-solarized
 " --------------------------------------------------------------------------------------------------
 function Check_kiki_colors_solarized()
-  if !filereadable(expand("$HOME/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
+  if !filereadable(expand("$HOME/.vim/bundle/colors_solarized/colors/solarized.vim"))
     if !g:ignore_warning_msg
       echom expand("please run    bash $HOME/.vim/run-pathogen.sh -i colors_solarized")
     endif
@@ -416,7 +427,7 @@ endfunction
 "                                                                  https://github.com/kien/ctrlp.vim
 " --------------------------------------------------------------------------------------------------
 function Check_kiki_ctrlp()
-  if !filereadable(expand("$HOME/.vim/bundle/ctrlp.vim/plugin/ctrlp.vim"))
+  if !filereadable(expand("$HOME/.vim/bundle/ctrlp/plugin/ctrlp.vim"))
     if !g:ignore_warning_msg
       echom expand("please run    bash $HOME/.vim/run-pathogen.sh -i ctrlp")
     endif
@@ -439,7 +450,7 @@ endfunction
 "                                                          https://github.com/vim-scripts/DrawIt.git
 " --------------------------------------------------------------------------------------------------
 function Check_kiki_drawit()
-  if !filereadable(expand("$HOME/.vim/bundle/DrawIt/plugin/DrawItPlugin.vim"))
+  if !filereadable(expand("$HOME/.vim/bundle/drawIt/plugin/DrawItPlugin.vim"))
     if !g:ignore_warning_msg
       echom expand("please run    bash $HOME/.vim/run-pathogen.sh -i drawit")
     endif
@@ -729,7 +740,7 @@ endif
 " [Help]                                                                           3) airline_themes
 " --------------------------------------------------------------------------------------------------
 if exists('g:loaded_airline_themes')
-  " More themes, please check '$HOME/.vim/bundle/vim-airline-themes/autoload/airline/themes'
+  " More themes, please check '$HOME/.vim/bundle/airline_themes/autoload/airline/themes'
   let g:airline_theme='jellybeans'    " Select airline theme
 endif
 
