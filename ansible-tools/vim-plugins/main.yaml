@@ -1,6 +1,6 @@
 - name: Install vim plugins dependences with root
   hosts: local_servers
-  become: "{{ 'yes' if ansible_become_pass is defined else 'no' }}" # required root permission
+  become: yes # required root permission
   tasks:
     - import_tasks: tasks/requirement_global.yaml
     - import_tasks: tasks/requirement_coc_nvim.yaml

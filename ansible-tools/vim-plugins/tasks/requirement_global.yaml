@@ -1,6 +1,5 @@
 - name: Install global required packages
   # sudo apt-get install -y vim gcc libncurses-dev make exuberant-ctags
-  when: ansible_become_pass is defined
   apt:
     name: "{{ item }}"
     state: present

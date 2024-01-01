@@ -1,6 +1,5 @@
 - name: Add NodeSource GPG key
   # wget -qO- https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
-  when: ansible_become_pass is defined
   apt_key:
     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
     state: present
@@ -9,7 +8,6 @@
     - vim_coc_nvim
 - name: Add NodeSource apt repository for Node.js 18.x
   # sudo add-apt-repository "deb https://deb.nodesource.com/node_18.x focal main" -y
-  when: ansible_become_pass is defined
   apt_repository:
     repo: deb https://deb.nodesource.com/node_18.x focal main
     state: present
@@ -19,7 +17,6 @@
     - vim_coc_nvim
 - name: Install Node.js and npm
   # sudo apt-get install -y nodejs
-  when: ansible_become_pass is defined
   apt:
     name: nodejs
     state: present
@@ -28,7 +25,6 @@
     - vim_coc_nvim
 - name: Install Yarn globally
   # npm install -g yarn
-  when: ansible_become_pass is defined
   npm:
     name: yarn
     state: present
