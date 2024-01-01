@@ -1,0 +1,79 @@
+- name: Export PATH environment variable
+  lineinfile:
+    path: ~/.bashrc
+    line: 'export PATH="$HOME/bin:$PATH"'
+    insertafter: EOF
+  tags:
+    - vim_global
+- name: Extract global
+  unarchive:
+    src: "{{ my_vim_bundle }}/global.tar.gz"
+    dest: "{{ my_vim_bundle }}"
+    remote_src: yes
+  tags:
+    - vim_global
+- name: Build global
+  command: "{{ item }}"
+  args:
+    chdir: "{{ my_vim_bundle }}/{{ global_path }}"
+  loop:
+    - ./configure
+    - make clean
+    - make
+  tags:
+    - vim_global
+- name: Install global
+  loop: "{{ item }}"
+  loop_control:
+    loop_var: item
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+    mode: "{{ item.mode }}"
+  vars:
+    item:
+      - src: "{{ my_vim_bundle }}/{{ global_path }}/global/global"
+        dest: "{{ my_home }}/bin/global"
+        mode: "0744"
+      - src: "{{ my_vim_bundle }}/{{ global_path }}/gtags/gtags"
+        dest: "{{ my_home }}/bin/gtags"
+        mode: "0744"
+      - src: "{{ my_vim_bundle }}/{{ global_path }}/htags/htags"
+        dest: "{{ my_home }}/bin/htags"
+        mode: "0744"
+      - src: "{{ my_vim_bundle }}/{{ global_path }}/gtags-cscope/gtags-cscope"
+        dest: "{{ my_home }}/bin/gtags-cscope"
+        mode: "0744"
+      - src: "{{ my_vim_bundle }}/{{ global_path }}/gtags.vim"
+        dest: "{{ my_vim_bundle }}/global/plugin/gtags.vim"
+        mode: "0644"
+      - src: "{{ my_vim_bundle }}/{{ global_path }}/gtags-cscope.vim"
+        dest: "{{ my_vim_bundle }}/global/plugin/gtags-cscope.vim"
+        mode: "0644"
+  tags:
+    - vim_global
+- name: Set yarn registry for coc.nvim
+  command: yarn config set registry 'https://registry.npm.taobao.org'
+  args:
+    chdir: "{{ my_vim_bundle }}/coc.nvim"
+  tags:
+    - vim_coc_nvim
+- name: Install requirements for coc.nvim
+  command: yarn install
+  args:
+    chdir: "{{ my_vim_bundle }}/coc.nvim"
+  tags:
+    - vim_coc_nvim
+- name: Restore Yarn Registry
+  command: yarn config set registry 'https://registry.yarnpkg.com'
+  args:
+    chdir: "{{ my_vim_bundle }}/coc.nvim"
+  tags:
+    - vim_coc_nvim
+- name: Build coc.nvim
+  command: yarn build
+  args:
+    chdir: "{{ my_vim_bundle }}/coc.nvim"
+  tags:
+    - vim_coc_nvim

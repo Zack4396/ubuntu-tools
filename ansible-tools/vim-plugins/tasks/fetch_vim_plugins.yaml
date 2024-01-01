@@ -1,0 +1,122 @@
+- name: Create directories
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: "{{ item.mode }}"
+  loop:
+    - {path: "{{ my_home }}/bin", mode: "0744"}
+    - {path: "{{ my_vim }}", mode: "0744"}
+    - {path: "{{ my_vim_autoload }}", mode: "0744"}
+    - {path: "{{ my_vim_bundle }}", mode: "0744"}
+    - {path: "{{ my_vim_bundle }}/global/plugin", mode: "0744"}
+  tags:
+    - vim_global
+- name: Fetch Vim Plugins From Local
+  loop: "{{ plugin_to_fetch }}"
+  loop_control:
+    loop_var: plugin
+  copy:
+    src: "{{ plugin.src }}"
+    dest: "{{ plugin.dest }}"
+    mode: "0644"
+  vars:
+    playbook_dir: "{{ ansible_playbook_dir }}"
+    plugin_to_fetch:
+      - src: "{{ playbook_dir }}/files/.vimrc"
+        dest: "{{ my_home }}/.vimrc"
+      - src: "{{ playbook_dir }}/files/.vim/main.vim"
+        dest: "{{ my_vim }}/main.vim"
+      - src: "{{ playbook_dir }}/files/.vim/misc.vim"
+        dest: "{{ my_vim }}/misc.vim"
+  tags:
+    - vimrc
+- name: Fetch Vim Plugins With Wget
+  environment:
+    http_proxy: "{{ my_proxy }}"
+    https_proxy: "{{ my_proxy }}"
+  loop: "{{ plugin_to_fetch }}"
+  loop_control:
+    loop_var: plugin
+  get_url:
+    url: "{{ plugin.url }}"
+    dest: "{{ plugin.dest }}"
+  when:
+    - "ansible_skip_tags is not defined or ansible_skip_tags is undefined or plugin.tags | intersect(ansible_skip_tags | list) | length == 0"
+    - "ansible_tags is not defined or ansible_tags is undefined or plugin.tags | intersect(ansible_tags | list) | length > 0"
+  vars:
+    plugin_to_fetch:
+      - url: https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+        dest: "{{ my_vim_autoload }}/pathogen.vim"
+        tags:
+          - vim_pathogen
+      - url: "https://ftp.gnu.org/pub/gnu/global/{{ global_path }}.tar.gz"
+        dest: "{{ my_vim_bundle }}/global.tar.gz"
+        tags:
+          - vim_global
+- name: Fetch Vim Plugins With Git
+  environment:
+    http_proxy: "{{ my_proxy }}"
+    https_proxy: "{{ my_proxy }}"
+  loop: "{{ plugins_to_fetch }}"
+  loop_control:
+    loop_var: plugin
+  git:
+    repo: "{{ plugin.repo }}"
+    dest: "{{ my_vim_bundle }}/{{ plugin.name }}"
+  when:
+    - "ansible_skip_tags is not defined or ansible_skip_tags is undefined or plugin.tags | intersect(ansible_skip_tags | list) | length == 0"
+    - "ansible_tags is not defined or ansible_tags is undefined or plugin.tags | intersect(ansible_tags | list) | length > 0"
+  vars:
+    plugins_to_fetch:
+      - name: winmanager
+        repo: https://github.com/vim-scripts/winmanager
+        tags:
+          - vim_winmanager
+      - name: nerdtree
+        repo: https://github.com/scrooloose/nerdtree
+        tags:
+          - vim_nerdtree
+      - name: minibufexpl.vim
+        repo: https://github.com/fholgado/minibufexpl.vim
+        tags:
+          - vim_minibufexpl
+      - name: taglist
+        repo: https://github.com/yegappan/taglist
+        tags:
+          - vim_taglist
+      - name: tagbar
+        repo: https://github.com/preservim/tagbar
+        tags:
+          - vim_tagbar
+      - name: lightline.vim
+        repo: https://github.com/itchyny/lightline.vim
+        tags:
+          - vim_lightline
+      - name: vim-airline
+        repo: https://github.com/vim-airline/vim-airline
+        tags:
+          - vim_airline
+      - name: vim-airline-themes
+        repo: https://github.com/vim-airline/vim-airline-themes
+        tags:
+          - vim_airline_themes
+      - name: vim-colors-solarized
+        repo: https://github.com/altercation/vim-colors-solarized
+        tags:
+          - vim_colors_solarized
+      - name: vim-colorschemes
+        repo: https://github.com/flazz/vim-colorschemes.git
+        tags:
+          - vim_colorschemes
+      - name: ctrlp.vim
+        repo: https://github.com/ctrlpvim/ctrlp.vim
+        tags:
+          - vim_ctrlp
+      - name: Drawit
+        repo: https://github.com/vim-scripts/DrawIt
+        tags:
+          - vim_drawit
+      - name: coc.nvim
+        repo: https://github.com/neoclide/coc.nvim
+        tags:
+          - vim_coc_nvim

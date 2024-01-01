@@ -1,0 +1,11 @@
+# Install vim-plugins with root
+ansible-playbook -i inventory.ini main.yaml --ask-pass --ask-become-pass --tags="vim"
+
+# Install vim-plugins
+ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root"
+
+# [Optional] - specified http proxy
+ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root" -e "target_proxy=http://192.168.2.175:10809"
+
+# [Optional] - specified home
+ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root" -e "target_home=/mnt/nfsroot/zhiqi.lai"
