@@ -1,11 +1,30 @@
-# Install vim-plugins with root
-ansible-playbook -i inventory.ini main.yaml --ask-pass --ask-become-pass --tags="vim"
+- For host machine, you may need
+$ sudo apt-get update
+$ sudo apt install -y ansible
 
-# Install vim-plugins
-ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root"
+- For target machine, you may need
+$ sudo apt-get update
+$ sudo apt install -y net-tools openssh-server git
 
-# [Optional] - specified http proxy
-ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root" -e "target_proxy=http://192.168.2.175:10809"
+- Install vim plugins for test machine(192.168.2.139)
+$ cd ansible-tools/vim-plugins
+$ vi inventory.ini
+  [local_servers]
+  ...
+  192.168.2.139 # Add the target machine IP where you want to install the plugins
+  ...
+$ ansible-playbook -i inventory.ini main.yaml --ask-pass --ask-become-pass --tags="vim"
 
-# [Optional] - specified home
-ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root" -e "target_home=/mnt/nfsroot/zhiqi.lai"
+
+Other Optional
+  # Install vim-plugins with root
+  ansible-playbook -i inventory.ini main.yaml --ask-pass --ask-become-pass --tags="vim"
+
+  # Install vim-plugins
+  ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root"
+
+  # [Optional] - specified http proxy
+  ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root" -e "target_proxy=http://192.168.2.175:10809"
+
+  # [Optional] - specified home
+  ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root" -e "target_home=/mnt/nfsroot/zhiqi.lai"

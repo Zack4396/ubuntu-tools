@@ -23,12 +23,19 @@
   tags:
     - root
     - vim_coc_nvim
+
+- name: Check Yarn
+  command: "which yarn"
+  register: yarn_check
+  ignore_errors: true
+
 - name: Install Yarn globally
   # npm install -g yarn
   npm:
     name: yarn
     state: present
     global: yes
+  when: yarn_check.rc != 0
   tags:
     - root
     - vim_coc_nvim

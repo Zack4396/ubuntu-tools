@@ -45,10 +45,6 @@
     - "ansible_tags is not defined or ansible_tags is undefined or plugin.tags | intersect(ansible_tags | list) | length > 0"
   vars:
     plugin_to_fetch:
-      - url: https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-        dest: "{{ my_vim_autoload }}/pathogen.vim"
-        tags:
-          - vim_pathogen
       - url: "https://ftp.gnu.org/pub/gnu/global/{{ global_path }}.tar.gz"
         dest: "{{ my_vim_bundle }}/global.tar.gz"
         tags:
@@ -68,6 +64,10 @@
     - "ansible_tags is not defined or ansible_tags is undefined or plugin.tags | intersect(ansible_tags | list) | length > 0"
   vars:
     plugins_to_fetch:
+      - name: pathogen
+        repo: https://github.com/tpope/vim-pathogen
+        tags:
+          - vim_pathogen
       - name: winmanager
         repo: https://github.com/vim-scripts/winmanager
         tags:

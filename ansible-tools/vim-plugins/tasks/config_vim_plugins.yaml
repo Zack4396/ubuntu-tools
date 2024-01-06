@@ -1,3 +1,10 @@
+- name: Setup pathogen.vim
+  copy:
+    src: "{{ my_vim_bundle }}/pathogen/autoload/pathogen.vim"
+    dest:  "{{ my_vim_autoload }}/pathogen.vim"
+    remote_src: yes
+  tags:
+    - vim_pathogen
 - name: Export PATH environment variable
   lineinfile:
     path: ~/.bashrc
