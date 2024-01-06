@@ -1,0 +1,15 @@
+- name: create generator.py
+  template:
+    src:  ../files/v2ray-config-generator.py.j2
+    dest: ~/bin/v2ray-config-generator.py
+    mode: "0744"
+- name: create run.sh
+  template:
+    src:  ../files/run.sh.j2
+    dest: ~/bin/run.sh
+    mode: "0744"
+- name: create proxy-setup.sh
+  template:
+    src:  ../files/proxy-setup.sh.j2
+    dest: ~/bin/proxy-setup.sh
+    mode: "0744"

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+vps_uuid=e593f32c-1562-b2a3-df20-75a5c1431491
+vps_port=23001
+vps_addr=gogogo.com
+vps_proto=ss
+proxy_port=10809
+
+tempfile=$(mktemp)
+python3 ~/bin/v2ray-config-generator.py \
+  --vps_uuid=$vps_uuid \
+  --vps_port=$vps_port \
+  --vps_addr=$vps_addr \
+  --vps_proto=$vps_proto \
+  --proxy_port=$proxy_port \
+  --output="$tempfile"
+
+sudo mv "$tempfile" /etc/v2ray-docker/config.json
+docker container stop proxy_box_01
+docker container rm proxy_box_01
+docker run -d --name proxy_box_01 -v /etc/v2ray-docker:/etc/v2ray-docker -p $proxy_port:$proxy_port v2ray/official v2ray -config=/etc/v2ray-docker/config.json
+sudo rm /etc/v2ray-docker/config.json

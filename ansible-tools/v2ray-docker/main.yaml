@@ -1,0 +1,18 @@
+- name: Install v2ray-docker dependences with root
+  hosts: local_servers
+  become: yes # required root permission
+  environment:
+    http_proxy: "{{ my_proxy }}"
+    https_proxy: "{{ my_proxy }}"
+  tasks:
+    - import_tasks: tasks/requirement_v2ray_docker.yaml
+  tags:
+    - root
+    - v2ray
+
+- name: Config v2ray-docker files
+  hosts: local_servers
+  tasks:
+    - import_tasks: tasks/config_v2ray_docker.yaml
+  tags:
+    - v2ray

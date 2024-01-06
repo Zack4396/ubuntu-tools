@@ -27,4 +27,4 @@ Other Optional
   ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root" -e "target_proxy=http://192.168.2.175:10809"
 
   # [Optional] - specified home
-  ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root" -e "target_home=/mnt/nfsroot/zhiqi.lai"
+  ansible-playbook -i inventory.ini main.yaml --ask-pass --tags="vim" --skip-tags="root" -e "target_home=xxxxx"

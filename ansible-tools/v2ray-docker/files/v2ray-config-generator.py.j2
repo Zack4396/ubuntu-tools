@@ -1,0 +1,341 @@
+#!/usr/bin/env python3
+
+
+class Protocols(object):
+    HTTP: str
+    Shadowsocks: str
+    SOCKS: str
+    VMess: str
+    FREEDOM: str
+    BLACKHOLE: str
+
+
+class Tag(object):
+    DIRECT: str
+    PROXY: str
+    BLOCK: str
+
+
+class Strategy(object):
+    AsIs: str
+    IPIfNonMatch: str
+    IPOnDemand: str
+
+
+class Options(object):
+    proxy_protocol: str
+    proxy_strategy: str
+
+
+PROTOCOL = Protocols()
+PROTOCOL.HTTP = "http"
+PROTOCOL.Shadowsocks = "shadowsocks"
+PROTOCOL.SOCKS = "socks"
+PROTOCOL.VMess = "vmess"
+PROTOCOL.FREEDOM = "freedom"
+PROTOCOL.BLACKHOLE = "blackhole"
+
+TAG = Tag()
+TAG.DIRECT = "direct"
+TAG.PROXY = "proxy"
+TAG.BLOCK = "block"
+
+STRATEGY = Strategy()
+STRATEGY.AsIs = "AsIs"
+STRATEGY.IPIfNonMatch = "IPIfNonMatch"
+STRATEGY.IPOnDemand = "IPOnDemand"
+
+OPTION = Options()
+# use http protocol
+OPTION.proxy_protocol = PROTOCOL.HTTP
+# use IPIfNonMatch
+OPTION.proxy_strategy = STRATEGY.IPIfNonMatch
+
+
+class Generator:
+    def __init__(self) -> None:
+        self._vps_address = None
+        self._vps_port = None
+        self._vps_uuid = None
+        self._vps_protocol = None
+        self._proxy_port = None
+        self._proxy_protocol = OPTION.proxy_protocol
+        self._proxy_allow_lan = True
+        pass
+
+    @property
+    def vps_address(self):
+        return self._vps_address
+
+    @vps_address.setter
+    def vps_address(self, address):
+        self._vps_address = address
+
+    @property
+    def vps_port(self):
+        return self._vps_port
+
+    @vps_port.setter
+    def vps_port(self, port):
+        self._vps_port = port
+
+    @property
+    def vps_uuid(self):
+        return self._vps_uuid
+
+    @vps_uuid.setter
+    def vps_uuid(self, vps_uuid):
+        self._vps_uuid = vps_uuid
+
+    @property
+    def vps_protocol(self):
+        return self._vps_protocol
+
+    @vps_protocol.setter
+    def vps_protocol(self, protocol):
+        self._vps_protocol = protocol
+
+    @property
+    def proxy_port(self):
+        return self._proxy_port
+
+    @proxy_port.setter
+    def proxy_port(self, port):
+        self._proxy_port = port
+
+    @property
+    def proxy_protocol(self):
+        return self._proxy_protocol
+
+    @property
+    def proxy_allow_lan(self):
+        return self._proxy_allow_lan
+
+    @proxy_allow_lan.setter
+    def proxy_allow_lan(self, allow):
+        self._proxy_allow_lan = allow
+
+    def inbound(self) -> list:
+        result = []
+
+        if not self.proxy_port:
+            assert False, f"self.proxy_port is unset"
+
+        obj = dict(
+            tag=self.proxy_protocol,
+            port=int(self.proxy_port),
+            listen="0.0.0.0" if self.proxy_allow_lan else "127.0.0.1",
+            protocol=self.proxy_protocol,
+            settings={"udp": True if self.proxy_protocol == PROTOCOL.SOCKS else False},
+        )
+        result.append(obj)
+
+        return result
+
+    def outbound(self) -> list:
+        result = []
+
+        if not self.vps_port:
+            assert False, f"self.vps_port is unset"
+
+        if self.vps_protocol == PROTOCOL.VMess:
+            setting = dict(
+                vnext=[
+                    {
+                        "address": self.vps_address,
+                        "port": int(self.vps_port),
+                        "users": [
+                            {
+                                "id": self.vps_uuid,
+                                "alterId": 0,
+                                "email": "t@t.tt",
+                                "security": "auto",
+                            }
+                        ],
+                    }
+                ]
+            )
+        elif self.vps_protocol == PROTOCOL.Shadowsocks:
+            setting = dict(
+                servers=[
+                    {
+                        "address": self.vps_address,
+                        "method": "aes-128-gcm",
+                        "ota": False,
+                        "password": self.vps_uuid,
+                        "port": int(self.vps_port),
+                        "level": 1,
+                    }
+                ]
+            )
+        else:
+            assert False, f"{self.vps_protocol} is unsupported"
+
+        obj = dict(tag=TAG.PROXY, protocol=self.vps_protocol, settings=setting)
+        result.append(obj)
+
+        obj = dict(tag=TAG.DIRECT, protocol=PROTOCOL.FREEDOM, settings={})
+        result.append(obj)
+
+        obj = dict(
+            tag=TAG.BLOCK,
+            protocol=PROTOCOL.BLACKHOLE,
+            settings={"response": {"type": "http"}},
+        )
+        result.append(obj)
+
+        return result
+
+    def major_rules(self) -> list:
+        result = []
+
+        # Bypass rules
+        domain = [
+            "domain:baidu.com",
+            "domain:youdao.com",
+        ]
+        obj = dict(type="field", outboundTag=TAG.DIRECT, domain=domain)
+        result.append(obj)
+
+        # OpenAI rules
+        domain = [
+            "domain:chat.openai.com",
+            "domain:cdn.openai.com",
+            "domain:beacons.gcp.gvt2.com",
+            "domain:widget.intercom.io",
+            "domain:tcr9i.chat.openai.com",
+            "domain:api-iam.intercom.io",
+            "domain:events.statsigapi.net",
+        ]
+
+        # Github rules
+        domain += ["domain:github.com"]
+
+        obj = dict(type="field", outboundTag=TAG.PROXY, domain=domain)
+        result.append(obj)
+
+        return result
+
+    def minor_rules(self) -> list:
+        result = []
+
+        obj = dict(type="field", outboundTag=TAG.DIRECT, domain=["geosite:cn"])
+        result.append(obj)
+
+        obj = dict(
+            type="field", outboundTag=TAG.DIRECT, ip=["geoip:private", "geoip:cn"]
+        )
+        result.append(obj)
+
+        obj = dict(
+            type="field", outboundTag=TAG.BLOCK, domain=["geosite:category-ads-all"]
+        )
+        result.append(obj)
+
+        # Over All
+        # IPs in this list will use a proxy when sending data to this computer.
+        allowed_source = [
+            "{{ ansible_default_ipv4.address }}"
+        ]
+
+        if allowed_source:
+            obj = dict(type="field", outboundTag=TAG.PROXY, source=allowed_source)
+            result.append(obj)
+
+        obj = dict(type="field", outboundTag=TAG.DIRECT, port="0-65535")
+        result.append(obj)
+
+        return result
+
+    def routing(self) -> dict:
+        rules = self.major_rules() + self.minor_rules()
+        obj = dict(
+            domainStrategy=OPTION.proxy_strategy,
+            rules=rules,
+        )
+
+        return obj
+
+    def output(self):
+        box = dict(
+            inbounds=self.inbound(), outbounds=self.outbound(), routing=self.routing()
+        )
+
+        return box
+
+
+def arg_parse():
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser(description="v2ray config generator")
+
+    vps_group = parser.add_argument_group("vps", "vps options")
+    vps_group.add_argument(
+        "--vps_uuid",
+        required=True,
+        type=str,
+        help="vps server uuid, e.g. --vps_uuid=e593f32c-1562-b2a3-df20-75a5c1431491",
+    )
+    vps_group.add_argument(
+        "--vps_port",
+        required=True,
+        type=str,
+        help="vps server port, e.g. --vps_port=23001",
+    )
+    vps_group.add_argument(
+        "--vps_addr",
+        required=True,
+        type=str,
+        help="vps server addr, e.g. --vps_addr=gogogo.com",
+    )
+    vps_group.add_argument(
+        "--vps_proto",
+        required=True,
+        choices=["vmess", "ss"],
+        type=str,
+        help="vps server proto, e.g. --vps_proto=vmess",
+    )
+
+    parser.add_argument(
+        "--output", type=str, default="config.json", help="output to v2ray config"
+    )
+
+    proxy_group = parser.add_argument_group("proxy", "proxy options")
+    proxy_group.add_argument(
+        "--proxy_port", type=str, default="10809", help="proxy port"
+    )
+
+    return parser.parse_args()
+
+
+def main():
+    import os
+
+    args = arg_parse()
+
+    output = args.output
+    if not os.path.isfile(output):
+        print(f"{output} is not exist")
+        exit(1)
+
+    with open(output, "w") as f:
+        import json
+
+        # generate
+        generator = Generator()
+        generator.vps_address = args.vps_addr
+        generator.vps_port = args.vps_port
+        generator.vps_uuid = args.vps_uuid
+        generator.vps_protocol = (
+            PROTOCOL.Shadowsocks if args.vps_proto == "ss" else PROTOCOL.VMess
+        )
+        generator.proxy_port = args.proxy_port
+
+        # save
+        json.dump(generator.output(), f, indent=2)
+
+    exit(0)
+
+
+if __name__ == "__main__":
+    main()

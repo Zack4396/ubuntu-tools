@@ -1,0 +1,18 @@
+#!/bin/bash
+test_proxy="{{ ansible_default_ipv4.address }}:10809"
+
+echo "Temporarily modify the environment variables"
+
+# Set Git Proxy
+git config --global http.proxy http://${test_proxy}
+git config --global https.proxy https://${test_proxy}
+
+# Set Repo & Wget proxy
+export http_proxy="${test_proxy}"
+export https_proxy="${test_proxy}"
+
+# Set Curl proxy
+echo "proxy=${test_proxy}" > ~/.curlrc
+
+# Test Proxy
+wget www.google.com.hk -O /dev/null
