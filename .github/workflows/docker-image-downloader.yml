@@ -1,10 +1,10 @@
-name: Docker Image Version Tracker (linux/amd64 only)
+name: Docker Image Downloader (linux/amd64 only)
 
 on:
   workflow_dispatch: # 手动触发
 
 jobs:
-  check-latest-version-and-save:
+  download-and-save:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,21 +18,14 @@ jobs:
       run: |
         docker pull --platform linux/amd64 v2fly/v2fly-core:latest
 
-    # 获取并保存最新版本号
-    - name: Record latest version and save image
+    # 保存镜像为 tar 文件，文件名为固定名称
+    - name: Save Docker image to file
       run: |
-        IMAGE_ID=$(docker images --format "{{.ID}}" v2fly/v2fly-core:latest | head -n 1)
-        VERSION=$(docker inspect $IMAGE_ID | jq -r '.[0].RepoTags[0]' | cut -d':' -f2)  # 提取冒号后的版本号
-        echo "Latest Version: $VERSION"
-        
-        # 保存镜像为 tar 文件，使用版本号作为文件名
-        docker save -o "v2fly-core-${VERSION}-linux-amd64.tar" v2fly/v2fly-core:latest
+        docker save -o "v2fly-core-latest-linux-amd64.tar" v2fly/v2fly-core:latest
 
-    # 上传版本信息和镜像文件
-    - name: Upload version info and Docker image
+    # 上传镜像文件
+    - name: Upload Docker image
       uses: actions/upload-artifact@v3
       with:
         name: v2fly-core-latest
-        path: |
-          v2fly-core-latest-version.txt
-          v2fly-core-${VERSION}-linux-amd64.tar
+        path: v2fly-core-latest-linux-amd64.tar
