@@ -22,7 +22,7 @@ jobs:
     - name: Record latest version and save image
       run: |
         IMAGE_ID=$(docker images --format "{{.ID}}" v2fly/v2fly-core:latest | head -n 1)
-        VERSION=$(docker inspect $IMAGE_ID | jq -r '.[0].RepoTags[0]' | sed 's/:/-/g')  # 替换冒号为短横线
+        VERSION=$(docker inspect $IMAGE_ID | jq -r '.[0].RepoTags[0]' | cut -d':' -f2)  # 提取冒号后的版本号
         echo "Latest Version: $VERSION"
         
         # 保存镜像为 tar 文件，使用版本号作为文件名
